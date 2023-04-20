@@ -8,7 +8,7 @@ type TInputControl = {
 
 const InputControl = ({fieldName}:TInputControl) => {
 	return (
-		<Field name="username">
+		<Field name="bitch">
 			{({ input, meta }) => (
 				<div>
 					<Label>Указать с НДФЛ</Label>

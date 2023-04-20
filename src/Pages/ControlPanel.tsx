@@ -1,17 +1,24 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import { Form, Field } from "react-final-form"
-import FieldControl from "../components/FieldControl"
-import {fields} from "../utils/fields"
+import {fieldsData, IField} from "../utils/fields"
 import styled from "./ControlPanel.module.scss"
 import InputControl from "../components/InputControl"
+import SelectControl from "../components/SelectControl"
 
 
 
 
 const ControlPanel = (): JSX.Element => {
+	const [ fields, setFields ] = useState<IField[]>([])
+	const [ selectedId, setSelectedId ] = useState<string | null>(null)
+	const [ salaryInput, setSalaryInput ] = useState<boolean | null>(true)
+
+	useEffect(() => {
+		setFields(fieldsData || [])
+	}, [])
 
 	const onSubmit = () => {
-		console.log("hello")
+		console.log("f")
 	}
 
 	const calculate = (event: React.ChangeEvent<HTMLInputElement> ) => {
@@ -19,28 +26,35 @@ const ControlPanel = (): JSX.Element => {
 		console.log(enteredName)
 	}
 
-	const handleSelect = () => {
-		console.log("fd")
+	const handleSelect = (id:string) : void => {
+		setSelectedId(id)
+		if (id !== "2") {
+			setSalaryInput(true)
+		} else setSalaryInput(false)
+
 	}
+
+	console.log(salaryInput)
 
 	return (
 		<Form
 			onSubmit={onSubmit}
 			render={({
 				handleSubmit,
-				form,
-				submitting,
-				pristine,
 				values }) => (
 				<form className={styled.form} onSubmit={handleSubmit}>
-					{fields.map((field, key) =>
-						<FieldControl
-							key={field.id}
-							value={field.title}
-							hasInput={field.hasInput}
-							handleSelect={handleSelect}/>
-					)}
-					<InputControl fieldName={"fieldName"}/>
+					<SelectControl
+						fields={fields}
+						handleSelect={handleSelect}
+						selectedId={selectedId}
+						/*isSelected={isSelected}
+						key={field.id}
+						value={field.title}
+						hasInput={field.hasInput}
+						paymentType={field.paymentType}*/
+					/>
+
+					{salaryInput && <InputControl fieldName={"fieldName"}/> }
 
 					<pre>{JSON.stringify(values)}</pre>
 				</form>
