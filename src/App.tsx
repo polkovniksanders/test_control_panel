@@ -1,9 +1,14 @@
 import React from 'react'
 import './styles/global.scss'
 
+import ControlPanel from "./Pages/ControlPanel";
+
+
 const App = () => {
   return (
-      <div>hello</div>
+ <div className={'container'}>
+        <ControlPanel/>
+ </div>
   )
 }
 
