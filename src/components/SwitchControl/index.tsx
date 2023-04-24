@@ -2,13 +2,18 @@ import React from "react"
 import Form from "react-bootstrap/Form"
 import styled from "./SwitchControl.module.scss"
 
-const SwitchControl = ({handleSwitch, withTax}) => {
+type ISwitchControl = {
+	withTax?: boolean,
+	handleSwitch:(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+}
+
+const SwitchControl = ({handleSwitch, withTax}:ISwitchControl) => {
 	return (
 		<Form>
 			<div className={styled.wrapper}>
 				<p>Указать с НДФЛ</p>
 				<Form.Check
-					onChange={handleSwitch}
+					onChange={e => handleSwitch(e)}
 					type="switch"
 					id="custom-switch"
 				/>

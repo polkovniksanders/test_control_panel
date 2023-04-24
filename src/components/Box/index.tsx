@@ -7,12 +7,12 @@ import T from "../Typography"
 import Rub from "../Icons/Rub"
 
 export type TSalary = {
-	clean: number,
-	tax: number,
-	total: number,
+	clean?: number,
+	tax?: number,
+	total?: number,
 }
 
-const Box = ({salary} : TSalary) => {
+const Box = (salary: TSalary) => {
 	return (
 		<Toast className={styled.toast}>
 			<Toast.Body>

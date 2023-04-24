@@ -17,8 +17,8 @@ const ControlPanel = (): JSX.Element => {
 	const [ selectedId, setSelectedId ] = useState<string | null>(null)
 	const [ salaryInput, setSalaryInput ] = useState<boolean | null>(true)
 	const [ salary, setSalary ] = useState<object | null>(null)
-	const [ salaryBoxVisible, setSalaryBoxVisible] = useState<boolean | null>(false)
-	const [ withTax, setWithTax] = useState<boolean | null>(false)
+	const [ salaryBoxVisible, setSalaryBoxVisible] = useState<boolean | null>(true)
+	const [ withTax, setWithTax] = useState<boolean | undefined>(false)
 
 	useEffect(() => {
 		setFields(fieldsData || [])
@@ -28,18 +28,18 @@ const ControlPanel = (): JSX.Element => {
 		console.log("submit handler")
 	}
 
-	const calculate = (event: React.ChangeEvent<HTMLInputElement> ) => {
-
-		const enteredName = Number(event.target.value)
-		const calculatedPercent = enteredName / 100 * NDFL_PERCENT
-
-
-		const result = addition(enteredName, calculatedPercent)
+	const calculate = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) : void => {
+		//Сумма введенная вручную
+		const cleanValue = Number(event.target.value)
+		//Вычисляем процент отчислений
+		const taxPercent = cleanValue / 100 * NDFL_PERCENT
+		//Итоговая сумма
+		const totalPayment = addition(cleanValue, taxPercent)
 
 		setSalary({
-			clean: enteredName,
-			tax: calculatedPercent,
-			total: result
+			clean: cleanValue,
+			tax: taxPercent,
+			total: totalPayment
 		})
 	}
 
@@ -58,7 +58,8 @@ const ControlPanel = (): JSX.Element => {
 
 	}
 
-	const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSwitch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		console.log(event)
 		setWithTax(true)
 	}
 
@@ -66,7 +67,6 @@ const ControlPanel = (): JSX.Element => {
 
 	return (
 		<div>
-
 			<label>Сумма</label>
 			<Form
 				onSubmit={onSubmit}
@@ -83,12 +83,12 @@ const ControlPanel = (): JSX.Element => {
 							withTax={withTax}
 							handleSwitch={handleSwitch}
 						/>
-						{salaryInput && <InputControl calculate={calculate} fieldName={"fieldName"}/> }
-						{salaryBoxVisible ? <Box salary={salary}/> : null}
+						{salaryInput && <InputControl calculate={calculate}/> }
+
+						{salaryBoxVisible && <Box {...salary} />}
 
 					</form>
 				)}
-
 			/>
 		</div>
 	)
