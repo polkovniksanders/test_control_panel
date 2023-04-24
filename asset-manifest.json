@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/test_control_panel/static/css/main.a04da994.css",
+    "main.js": "/test_control_panel/static/js/main.9ef02c77.js",
+    "index.html": "/test_control_panel/index.html",
+    "main.a04da994.css.map": "/test_control_panel/static/css/main.a04da994.css.map",
+    "main.9ef02c77.js.map": "/test_control_panel/static/js/main.9ef02c77.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a04da994.css",
+    "static/js/main.9ef02c77.js"
+  ]
+}
