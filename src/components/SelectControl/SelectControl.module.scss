@@ -1,4 +1,14 @@
 .wrapper {
     font-size: 1.25rem;
+    padding: .5rem 0;
     margin-bottom: .5rem;
+    display: flex;
+    flex-direction: row;
+     & > .form-check {
+        font-size: 2rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
 }

@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from "react"
 import { Form, Field } from "react-final-form"
-import {fieldsData, IField} from "../utils/fields"
-import styled from "./ControlPanel.module.scss"
+
 import InputControl from "../components/InputControl"
 import SelectControl from "../components/SelectControl"
-
+import Box from "../components/Box"
+import {fieldsData, IField} from "../utils/fields"
+import {NDFL_PERCENT} from "../utils/settings"
+import styled from "./ControlPanel.module.scss"
+import {addition, subtraction} from "../utils/calculate"
+import SwitchControl from "../components/SwitchControl"
 
 
 
@@ -12,18 +16,31 @@ const ControlPanel = (): JSX.Element => {
 	const [ fields, setFields ] = useState<IField[]>([])
 	const [ selectedId, setSelectedId ] = useState<string | null>(null)
 	const [ salaryInput, setSalaryInput ] = useState<boolean | null>(true)
+	const [ salary, setSalary ] = useState<object | null>(null)
+	const [ salaryBoxVisible, setSalaryBoxVisible] = useState<boolean | null>(false)
+	const [ withTax, setWithTax] = useState<boolean | null>(false)
 
 	useEffect(() => {
 		setFields(fieldsData || [])
 	}, [])
 
 	const onSubmit = () => {
-		console.log("f")
+		console.log("submit handler")
 	}
 
 	const calculate = (event: React.ChangeEvent<HTMLInputElement> ) => {
-		const enteredName = event.target.value
-		console.log(enteredName)
+
+		const enteredName = Number(event.target.value)
+		const calculatedPercent = enteredName / 100 * NDFL_PERCENT
+
+
+		const result = addition(enteredName, calculatedPercent)
+
+		setSalary({
+			clean: enteredName,
+			tax: calculatedPercent,
+			total: result
+		})
 	}
 
 	const handleSelect = (id:string) : void => {
@@ -32,35 +49,48 @@ const ControlPanel = (): JSX.Element => {
 			setSalaryInput(true)
 		} else setSalaryInput(false)
 
+		if (id === "1") {
+			setSalaryBoxVisible(true)
+		} else setSalaryBoxVisible(false)
+
+
+		setSalary(null)
+
 	}
 
-	console.log(salaryInput)
+	const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setWithTax(true)
+	}
+
+
 
 	return (
-		<Form
-			onSubmit={onSubmit}
-			render={({
-				handleSubmit,
-				values }) => (
-				<form className={styled.form} onSubmit={handleSubmit}>
-					<SelectControl
-						fields={fields}
-						handleSelect={handleSelect}
-						selectedId={selectedId}
-						/*isSelected={isSelected}
-						key={field.id}
-						value={field.title}
-						hasInput={field.hasInput}
-						paymentType={field.paymentType}*/
-					/>
+		<div>
 
-					{salaryInput && <InputControl fieldName={"fieldName"}/> }
+			<label>Сумма</label>
+			<Form
+				onSubmit={onSubmit}
+				render={({
+					handleSubmit,
+					values }) => (
+					<form className={styled.form} onSubmit={handleSubmit}>
+						<SelectControl
+							fields={fields}
+							handleSelect={handleSelect}
+							selectedId={selectedId}
+						/>
+						<SwitchControl
+							withTax={withTax}
+							handleSwitch={handleSwitch}
+						/>
+						{salaryInput && <InputControl calculate={calculate} fieldName={"fieldName"}/> }
+						{salaryBoxVisible ? <Box salary={salary}/> : null}
 
-					<pre>{JSON.stringify(values)}</pre>
-				</form>
-			)}
+					</form>
+				)}
 
-		/>
+			/>
+		</div>
 	)
 }
 

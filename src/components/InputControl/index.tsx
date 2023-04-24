@@ -1,25 +1,24 @@
 import React from "react"
 import {Field} from "react-final-form"
-import Label from "../Label"
+import Form from "react-bootstrap/Form"
+import styled from "./Input.module.scss"
 
 type TInputControl = {
 	fieldName: string,
+	calculate: (val: string) => void,
 }
 
-const InputControl = ({fieldName}:TInputControl) => {
+const InputControl = ({fieldName, calculate}:TInputControl) => {
 	return (
 		<Field name="bitch">
-			{({ input, meta }) => (
-				<div>
-					<Label>Указать с НДФЛ</Label>
-					<input
-						{...input}
-						type="text"
-						placeholder="0"
-						/*onChange={calculate}*/
-					/>
-					{meta.error && meta.touched && <span>{meta.error}</span>}
-				</div>
+			{() => (
+				<Form.Control
+					className={styled.input}
+					onChange={calculate}
+					type="number"
+					id="salaty-input"
+					aria-describedby="passwordHelpBlock"
+				/>
 			)}
 		</Field>
 	)
