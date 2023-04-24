@@ -15,12 +15,17 @@ p {
 .container {
   max-width: 1200px;
   width: 768px;
-  margin: 0 auto;
-  height: 100vh;
-  display: flex;
-  align-items: center;
+  margin: 3rem auto;
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.form-check-input:checked {
+  background-color: orange;
+  border-color: lightsalmon;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

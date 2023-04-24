@@ -5,6 +5,7 @@ import {Field} from "react-final-form"
 import Hint from "../Hint"
 import styled from "./SelectControl.module.scss"
 import {IField} from "../../utils/fields"
+import T from "../Typography"
 
 
 type TField = {
@@ -24,7 +25,7 @@ const SelectControl = ({fields, handleSelect, selectedId}: TField) => {
 					<Form.Check
 						id={`default-${field.id}`}
 						type={"radio"}
-						label={field.title}
+						label={<T>{field.title}</T>}
 						name={field.paymentType}
 						checked={ selectedId ? field?.id === selectedId : field.checked}
 						onChange={() => handleSelect(field.id) }
@@ -36,7 +37,5 @@ const SelectControl = ({fields, handleSelect, selectedId}: TField) => {
 		)}
 	</>
 }
-
-
 
 export default SelectControl

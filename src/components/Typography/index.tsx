@@ -8,5 +8,4 @@ const T = ({children}:PropsWithChildren) => {
 	return <span style={style}>{children}</span>
 }
 
-
 export default T

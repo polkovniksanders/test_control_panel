@@ -2,10 +2,8 @@
   display: flex;
   align-items: center;
   font-size: 1rem;
-  margin-bottom: .5rem;
-  &:last-child {
-    margin-bottom: 0;
-  };
+  margin: .75rem 0;
+  color: darkgray;
   &:hover {
     cursor: pointer;
   }

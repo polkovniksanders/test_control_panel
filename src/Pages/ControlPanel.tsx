@@ -4,13 +4,12 @@ import { Form, Field } from "react-final-form"
 import InputControl from "../components/InputControl"
 import SelectControl from "../components/SelectControl"
 import Box from "../components/Box"
+import SwitchControl from "../components/SwitchControl"
+import Label from "../components/Label"
+import {addition, subtraction} from "../utils/calculate"
+import styled from "./ControlPanel.module.scss"
 import {fieldsData, IField} from "../utils/fields"
 import {NDFL_PERCENT} from "../utils/settings"
-import styled from "./ControlPanel.module.scss"
-import {addition, subtraction} from "../utils/calculate"
-import SwitchControl from "../components/SwitchControl"
-
-
 
 const ControlPanel = (): JSX.Element => {
 	const [ fields, setFields ] = useState<IField[]>([])
@@ -18,7 +17,8 @@ const ControlPanel = (): JSX.Element => {
 	const [ salaryInput, setSalaryInput ] = useState<boolean | null>(true)
 	const [ salary, setSalary ] = useState<object | null>(null)
 	const [ salaryBoxVisible, setSalaryBoxVisible] = useState<boolean | null>(true)
-	const [ withTax, setWithTax] = useState<boolean | undefined>(false)
+	const [ taxFree, setTaxFree] = useState<boolean | undefined>(true)
+	const [ salaryValue, setSalaryValue ] = useState<string>("")
 
 	useEffect(() => {
 		setFields(fieldsData || [])
@@ -28,18 +28,25 @@ const ControlPanel = (): JSX.Element => {
 		console.log("submit handler")
 	}
 
-	const calculate = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) : void => {
-		//Сумма введенная вручную
-		const cleanValue = Number(event.target.value)
-		//Вычисляем процент отчислений
+	useEffect(() => {
+		calculate()
+	}
+	,[ salaryValue, taxFree ])
+
+	const calculateSalary = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) : void  => {
+		setSalaryValue(event.target.value)
+	}
+
+	const calculate = () : void => {
+		/*Логику расчета смотрите в корне в файле CALCULATE.md*/
+		const cleanValue = Number(salaryValue)
 		const taxPercent = cleanValue / 100 * NDFL_PERCENT
-		//Итоговая сумма
 		const totalPayment = addition(cleanValue, taxPercent)
 
 		setSalary({
-			clean: cleanValue,
+			clean: taxFree ? cleanValue : cleanValue - taxPercent,
 			tax: taxPercent,
-			total: totalPayment
+			total: taxFree ? totalPayment : cleanValue
 		})
 	}
 
@@ -53,21 +60,16 @@ const ControlPanel = (): JSX.Element => {
 			setSalaryBoxVisible(true)
 		} else setSalaryBoxVisible(false)
 
-
-		setSalary(null)
-
+		setSalaryValue("")
 	}
 
 	const handleSwitch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		console.log(event)
-		setWithTax(true)
+		setTaxFree(!taxFree)
 	}
-
-
 
 	return (
 		<div>
-			<label>Сумма</label>
+			<Label>Сумма</Label>
 			<Form
 				onSubmit={onSubmit}
 				render={({
@@ -79,14 +81,17 @@ const ControlPanel = (): JSX.Element => {
 							handleSelect={handleSelect}
 							selectedId={selectedId}
 						/>
-						<SwitchControl
-							withTax={withTax}
-							handleSwitch={handleSwitch}
-						/>
-						{salaryInput && <InputControl calculate={calculate}/> }
+						{selectedId === "2" ? null :
+							<SwitchControl
+								taxFree={taxFree}
+								handleSwitch={handleSwitch}
+							/>}
+						{salaryInput && <InputControl
+							salaryValue={salaryValue}
+							calculateSalary={calculateSalary}
+						/> }
 
 						{salaryBoxVisible && <Box {...salary} />}
-
 					</form>
 				)}
 			/>

@@ -7,15 +7,16 @@ type Props = {
 	className?: string
 }
 
-
-const Label: FC<Props> = ({children, key, className}) => {
+const Label: FC<Props> = ({
+	children,
+	key,
+	className
+}) => {
 	return (
 		<label className={styled.wrapper} key={key}>
 			{children}
 		</label>
 	)
 }
-
-
 
 export default Label
